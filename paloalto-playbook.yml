@@ -1,0 +1,25 @@
+---
+- name: Palo Alto Playbook
+  hosts: localhost
+  connection: local
+
+  vars:
+    provider:
+      ip_address: 192.168.70.33 # IP or hostname of PAN-OS being configured
+      username: admin # admin is the default value
+      password: qwerty  # the most powerful password on earth
+      #api_key: key to use (exclusive to username/password)
+      #serial_number: The serial number of a firewall to use for targeted commands. If ip_address is not a Panorama PAN-OS device, then this param is ignored
+  
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+  - name: Get the system info
+    panos_op:
+      provider: '{{ provider }}'
+      cmd: 'show system info'
+    register: res
+
+  - debug:
+      msg: '{{ res.stdout }}'

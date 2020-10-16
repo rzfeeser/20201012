@@ -1,0 +1,1 @@
+sw-01 ansible_network_os=eos ansible_connection=network_cli ansible_become=yes ansible_become_method=enable ansible_user=admin ansible_ssh_pass=alta3 loopback=225.1.2.3 priority=99 hostname=sw01 iptoapply=1.2.3.4

@@ -1,0 +1,19 @@
+---
+- name: Checking out the template module
+  hosts: all
+
+  tasks:
+
+        - name: Create the directory to store finished config
+          file:
+            state: directory
+            path: prod_config/
+
+        - name: Template a file to prod_config/
+          template:
+            src: templates/switch_template.cfg.j2
+            dest: prod_config/switch_template{{ inventory_hostname }}.cfg
+
+        - name: load configuration from file
+          eos_config:
+            src: prod_config/switch_template{{ inventory_hostname }}.cfg

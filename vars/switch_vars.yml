@@ -1,0 +1,5 @@
+---
+loopback: 224.0.0.0/4
+priority: 64
+hostname: SuperArista
+iptoapply: 1.2.3.4

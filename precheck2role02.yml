@@ -1,0 +1,45 @@
+---
+- name: Playbook with Precheck Role
+  hosts: ~^arista
+
+  tasks:
+  - name: Precheck block
+    block:
+      - name: Import the precheck role
+        import_role:
+          name: precheck
+    rescue:
+      - fail:
+          msg: "PRECHECK FAILED! No need to rollback. Exiting."
+
+
+
+
+
+          #  - name: changes / work to do
+          #    #some module that makes a change to your network
+  
+
+
+
+  - name: Post check (after all your changes)
+    block:
+      - name: pull config so i can test if config took
+        arista.eos.eos_facts:
+                gather_subset:
+                - config
+        register: results
+        
+      - name: want to build tests around the results of my changes
+        debug:
+          var: results
+
+      - name: Run the fail module when something doesn't look "correct"
+        fail:
+          msg: "Something in the post check is wrong, rolling back"
+        when: '"dhcp client accept default-route" not in results.ansible_facts.ansible_net_config'
+
+    rescue:
+      - name: Something went wrong during post check
+        debug:
+          msg: "SOMETHING WENT WRONG DURING POST CHECK OPERATIONS. ROLLING BACK THE CHANGES"
